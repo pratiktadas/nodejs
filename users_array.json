@@ -1,0 +1,14 @@
+{
+    "users":[
+        {
+            "username":"test1",
+            "answers":["Red","Blue","Yellow","Green"]
+        },
+        {
+            "name":"mahesh",
+            "password":"password1",
+            "profession":"teacher",
+            "id":4
+        }
+    ]
+}
