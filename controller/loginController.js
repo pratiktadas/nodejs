@@ -5,6 +5,13 @@ var User = require('../model/User');
 var multer = require('multer');
 var path = require('path');
 
+// import async series package
+var async = require("async");
+//var gm = require('gm');
+var fs = require('fs')
+  , gm = require('gm').subClass({imageMagick: true});
+
+
 /* Login Using Mongoose Model */
 exports.loginUserUsingMongooseModel = function(req, res){
 
@@ -48,11 +55,17 @@ var store = multer.diskStorage({
     } 
 });
 
+// var upload = multer({
+//     storage: store
+// }).single('sampleFile');
+
+/* for angular 5 file upload */
 var upload = multer({
     storage: store
-}).single('sampleFile');
+}).single('image');
 
-exports.uploadFile=function(req,res){
+exports.uploadFile = function(req,res){
+    console.log(req.file);   
     upload(req,res,function(err){
         if(err){
             res.json(err);
@@ -61,9 +74,7 @@ exports.uploadFile=function(req,res){
     });
 }
 
-
 exports.addUserUsingMongooseModel = function(req, res){
-
     //var password_hash = bcrypt.hashSync(req.body.password,10);
     //req.body.password = password_hash;
     var newUser = new User(req.body);
@@ -77,4 +88,85 @@ exports.addUserUsingMongooseModel = function(req, res){
         // saved!
         }
     );
+}
+
+
+exports.asynchSeriesExample = function(req, res){
+    
+    async.series([    
+        function(callback){
+            //console.log(callback);
+            setTimeout(function(){
+                console.log("Task 1");
+                callback(null, abc());
+            }, 300);
+        },
+
+        function(callback){
+            setTimeout(function(){
+                console.log("Task 2");
+                callback(null, 2);
+            }, 200);        
+        },
+        
+        function(callback){
+            setTimeout(function(){
+                console.log("Task 3");
+                callback(null, 3);
+            }, 100);
+        }
+
+    ], function(err, result){
+        console.log(result);
+    });
+}
+
+function abc(){
+    var a = "xyz";
+    return a    
+}
+
+/* IMAGE MANIPULATION USING MG (MagicGrahpics)*/
+exports.cropImageUsingMg = function(req, res){
+    gm('./public/images/images_for_mg.jpeg')
+    .gravity('Center') // Move the starting point to the center of the image.
+    .crop(100, 100,50,50)
+    .write('./public/images/abc.jpeg', (err) => {
+        if(err){
+            console.log(err);
+        }else{
+            console.log("image croped");
+            res.json("image croped");
+        }
+        
+    })
+}
+
+
+/* IMAGE MANIPULATION USING MG (MagicGrahpics)*/
+exports.resizeImageUsingMg = function(req, res){
+    gm('./public/images/images_for_mg.jpeg')
+    .resize(100, 100)
+    .write('./public/images/resize.jpeg', (err) => {
+        if(err){
+            console.log(err);
+        }else{
+            console.log("image croped");
+            res.json("imaged resized");
+        }
+        
+    })
+}
+
+
+/* EXTRACT IMAGE ALL PROPERTIES */
+exports.extractsAllPropertiesOfImage = function(req, res){
+    gm('./public/images/abc.jpeg')
+    .identify(function(err, result){
+        if(err){
+            res.json(err);
+        }else{
+            res.json(result);
+        }
+    });    
 }

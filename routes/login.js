@@ -8,4 +8,12 @@ router.post('/uploadFile',loginController.uploadFile);
 
 router.post('/addUserUsingMongooseModel', loginController.addUserUsingMongooseModel);
 
+router.get('/asynchSeriesExample',loginController.asynchSeriesExample);
+
+router.get('/cropImageUsingMg',loginController.cropImageUsingMg);
+
+router.get('/resizeImageUsingMg',loginController.resizeImageUsingMg)
+
+router.get('/extractsAllPropertiesOfImage',loginController.extractsAllPropertiesOfImage);
+
 module.exports = router;

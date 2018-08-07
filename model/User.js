@@ -14,8 +14,8 @@ var UserSchema = new Schema({
         default: 'active'
     },
     user_contact: [{ type: Schema.Types.ObjectId, ref: 'usercontactcollection' }]
-    ,
-    flashcard : [{ type: Schema.Types.ObjectId, ref: "flashcardcollection" }]
+    //,
+    //flashcard : [{ type: Schema.Types.ObjectId, ref: "flashcardcollection" }]
 });
     
 var User = mongoose.model('usercollection', UserSchema);
